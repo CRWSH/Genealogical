@@ -4,7 +4,9 @@ SuperCollider code to create sound groups (populations) using a Genetic Algorith
 In the AfterSavev1.1 script you can find a GUI where you can create generation after generation by doing the fitness selection manually. It uses classes definied in the extension. To load these classes, theses class-files have to be in the extension directory of SuperCollider. More Information about the exact working principle you can find in next chapter (a part of my original thesis about this subject) .
 
 2.3. Implementation of the Genetic Algorithm Application
+
 2.3.1. Structure of the Synthesis Method
+
 Figure 2.3: The Synthesis Structure of an Individual Organism
 The total implementation of the GA application was built using Supercollider
 (Appendix: GA for Sound Organism v2.0). Before the implementation of a GA can
@@ -14,7 +16,6 @@ implemented depend on the definition of the structure. If you look at figure 2.3
 everything within the dotted line is organism-specific and has to be defined in the
 genetic presentation. The eight convolution Supercollider Synths outside the
 dashed line contain a fixed pan position and an Impulse response whit which the
-13
 sound is convolved. Some impulse responses originate from old audio-related
 electronic equipment: spring reverb, a tape delay, a telephone horn and a tube
 amplifier. Other responses are taken from some room acoustics. The parameters
@@ -28,6 +29,7 @@ of the parameters are Ugen specific: pulse width, center position of buffer, dur
 of the grain, etc. All the synth blocks or connected to a gate that contains an
 amplitude parameter. This gate is connected to one of the eight convolution Synths,
 which one is stored in the genetic code.
+
 The dotted line contains three types of parameters. The type and ranges of the
 parameters are fixed settings. As these are the same for every organism, they are
 not stored in the genetic representation. For the first type, the parameter is a fixed
@@ -53,12 +55,12 @@ other parts of the application, it was decide to use the object-oriented capabil
 in Supercollider. Another option would have been to use dictionaries, an unordered
 collection type of Supercollider, but I only learned this later on in the process.
 A possible improvement of the current synthesis technique is allowing more change
-14
 in the configuration of the structure. The only configurational settings the genetic
 presentation contains, is the number of Synth blocks used, which envelopes control
 which parameters and to which convolution synth the gate is connected to. The
 difference between the structural configuration of different organisms is only
 determined by these settings.
+
 The objective of the Genetic Programming algorithm is to use induction to devise a
 computer program. This is achieved by using evolutionary operators on candidate
 programs with a tree structure to improve the adaptive fit between the population
@@ -71,6 +73,7 @@ on a sub-symbolic representation of candidate solutions using surrogates for the
 processes (descent with modification) and mechanisms (genetic recombination,
 mutation, inversion, transposition, and gene expression) of evolution (Brownlee,
 2011, p. 134).
+
 A Genetic Programming (GP) and a Gene Expression Programming (GEP) algorithm
 are both more advanced methods than a GA. The genetic representation of an
 organism within these two algorithms are programs on them selfs. These algorithms
@@ -83,14 +86,15 @@ implemented application. Therefore the possible sounds this flexible synthesis
 structure can produce, is also larger. An example where a GEP algorithm (personal
 communication with A. Allik, January 30, 2014) is use to produce sound organisms,
 is tehis' Live Coded Evolution (Allik, 2013).
+
 2.3.2. The Genetic algorithm
+
 All the information of an organism is stored in an object of the class PulseOrg which
 contains sub-objects of the class type Timing, Envelope, Conv, TriPulseOsc (Synth in
 figure 2.3 ) and AmpEnv (gate in figure 2.2). The sub-objects contain relevant parts
 of the genetic representation. The amount of TriPulseOsc objects varies between
 one and three and is dependent on the number of Synths blocks present in the
 configuration of the synthesis structure (a characteristic of the organism). The nine
-15
 Envelope objects inside the PulseOrg object corresponds with to the number of
 envelopes present in the predefined structure. For the other sub-objects ,only one is
 stored in PulseOrg. The form of the genetic representation is different for every subclass.
@@ -104,6 +108,7 @@ the genetic representation. Apart from genetic operator functions and
 representation, the classes also contain functions for initialization, building the
 synthesis structure on the Supercollider server, freeing the synthesis structure,
 playing individual organisms and total populations, etc.
+
 In the implemented algorithm, whenever a generation is calculated, the old
 population is replaced entirely. Hence, an organism is only present during one
 generation. For the calculation of new generations I used an external Supercollider,
@@ -118,8 +123,10 @@ repeated until an entirely new generation has been created, which depends on the
 pool size setting. This selection technique ensures that the number of times an
 organism is selected as a possible parent is approximately the same for all the
 organisms.
-16
+
+
 Figure 2.4: the GUI of the application
+
 The user performs the fitness selection by giving every organism in the population a
 score between zero and three. There is no automatic audio analysis process that
 determines the fitness of a given organism. The fitness evaluation is done entirely
@@ -140,7 +147,6 @@ Supercollider Server, the required CPU power is around 50%. Therefore the
 population limit for this synthesis structure is approximately 64.
 While testing the application and composing of the first piece 'A Nursery Etude', it
 was concluded that a population size of 32 is too small, in most situations, to place
-17
 the emphasis on the group as an entity and not on the individual sounds. The group
 as an entity is not only dependent on the group size, as the way the sounds are
 packed together in time is also a determining factor, but it is a crucial parameter
@@ -166,7 +172,8 @@ selection on. The dynamic relation created by varying fitness scores will only b
 present in the selected sub-population and will be absent from the others. To
 ensure that the fittest organisms do not dissolve into the rest of the population, the
 three other sub-populations are played at a lower volume.
-18
+
+
 Figure 2.5: State Transition Diagram of the Application
 Figure 2.5 represents a state transition diagram of the application. It is a useful tool
 to explain the process of how new generations and sound material can be created.
@@ -190,7 +197,7 @@ only Impulse and Sharp are switched on, an envelope mutation can only affect the
 two values. When the timing update is finished and the user activates Play
 Generation, all the necessary Supercollider Synths are created on the server and
 connected with the appropriate audio and control busses. When the entire structure
-19
+
 has been built, the generation is played and automatically recorded in a sound file.
 The fitness scores can be awarded in two different ways. By pushing the Next
 Organism & Quote button, the organisms are played and the score setting (fitness
@@ -210,6 +217,7 @@ organisms. Their only effect is on the way a mutation is applied. For example, i
 Synth Mut button is switched off, a mutation can no longer change the values or the
 means to control the parameters within the Synth blocks in the synthesis structure
 (figure 2.3).
+
 Before a sub-population is played for the first time, the synthesis structure of all the
 organisms are created from scratch on the Supercollider Server. When the Next
 Generation button is hit, this structure is completely removed from the server. The
